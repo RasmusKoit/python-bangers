@@ -29,7 +29,7 @@
     Pages: 222
     
     
-    Mari likes to manage her time a lot and she knows that her median reading speed is 3.5 minutes
+    Mari likes to manage her time a lot and she knows that her median reading speed is 1.7 minutes
     When displaying book information add information that would show her how many hours it would take her
     to finish reading the book (round the time up if needed)
     
@@ -39,9 +39,34 @@
     
 """
 
+from typing import Dict
+
+READ_TIME = 1.7
+BOOKS = [
+    {
+        "title": "Tales of the City",
+        "released": 1978,
+        "author": "Armistead Maupin",
+        "pages": 371
+    },
+    {
+        "title": "Alkeemik",
+        "author": "Paulo Coelhe",
+        "released": 2014,
+        "pages": 182
+    },
+    {
+        "title": "Harry Potter and the Chamber of Secrets",
+        "author": "J. K. Rowling",
+        "released": 1998,
+        "pages": 251
+    }
+]
+
+
 def authorInitials(authorName):
     # I need to split the author name into seperate parts to show initials
-    splitName = authorName.split()  
+    splitName = authorName.split()
     initials = ""
     # loop through the list of splitted name
     for name in splitName:
@@ -49,6 +74,86 @@ def authorInitials(authorName):
 
     return initials
 
-if __name__ == "__main__":
-    print(authorInitials("Rasmus Koit"))
 
+def showBooks():
+    print("Quick overview of books:")
+    for index in range(len(BOOKS)):
+        print(str(index + 1) + ". " + BOOKS[index].get("title") +
+              " - " + authorInitials(BOOKS[index].get("author")))
+
+
+def bookInfo(book: Dict):
+    """
+    Book X by A. B. Bowanga - 1996
+    Pages: 222
+    Reading time: 13 hours
+    """
+    readTime = round((book.get("pages") * READ_TIME) / 60, 1)
+    bookDescription = """
+    {} by {} - {}
+    Pages: {}
+    Reading time: ~{} hours
+    """.format(book.get("title"), book.get("author"), 
+               book.get("released"), book.get("pages"), readTime)
+    print(bookDescription)
+
+
+def showBook():
+    bookInfo(BOOKS[chooseBook()])
+
+
+def chooseBook():
+    showBooks()
+    choice = int(input("Choose a book: ")) - 1
+    return choice
+
+
+def addBook():
+    print("ADD A BOOK")
+    newBook = {
+        "title": input("Enter book title: "),
+        "author": input("Enter book author: "),
+        "released": input("Enter release year: "),
+        "pages": input("Enter how many pages there are: ")
+    }
+    print("You have entered a new book!")
+    bookInfo(newBook)
+    BOOKS.append(newBook)
+
+
+def delBook():
+    print("DELETE A BOOK")
+    chosenBookIndex = chooseBook()
+    print("You removed", BOOKS[chosenBookIndex].get("title"))
+    BOOKS.pop(chosenBookIndex)
+    
+
+def startMenu():
+    menuOptions = """
+    MAIN MENU
+1. Show books
+2. Choose a book
+3. Add a book
+4. Del a book
+
+0. Exit
+    """
+    while True:
+        print(menuOptions)
+        selection = int(input("Enter your choice: "))
+        if(selection == 0):
+            exit()
+        elif(selection == 1):
+            showBooks()
+        elif(selection == 2):
+            showBook()
+        elif(selection == 3):
+            addBook()
+        elif(selection == 4):
+            delBook()
+        else:
+            print("Couldn't understand your choice, here are the options")
+
+
+if __name__ == "__main__":
+    startMenu()
