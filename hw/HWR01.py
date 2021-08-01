@@ -119,13 +119,22 @@ def addBook():
     print("You have entered a new book!")
     bookInfo(newBook)
     BOOKS.append(newBook)
+    # BOOKS.insert(0, newBook) # lisa listi algusesse
 
 
 def delBook():
     print("DELETE A BOOK")
     chosenBookIndex = chooseBook()
-    print("You removed", BOOKS[chosenBookIndex].get("title"))
-    BOOKS.pop(chosenBookIndex)
+    print("Are You certain you want to remove this book - ", BOOKS[chosenBookIndex].get("title"))
+    usersResponse = input("Yes or No")
+    if usersResponse == "No":
+        exit()
+    elif usersResponse == "Yes":
+        bookTitle = BOOKS[chosenBookIndex].get("title")
+        BOOKS.pop(chosenBookIndex)
+        print(bookTitle + " has been deleted.")
+        
+    # BOOKS.pop(chosenBookIndex) oleks õigem kui delete toimub enne confirmation msg't
     
 
 def startMenu():
