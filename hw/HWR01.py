@@ -88,13 +88,13 @@ def bookInfo(book: Dict):
     Pages: 222
     Reading time: 13 hours
     """
-    readTime = round((book.get("pages") * READ_TIME) / 60, 1)
+    readTime = round((float(book.get("pages")) * READ_TIME) / 60.0, 1)
     bookDescription = """
     {} by {} - {}
     Pages: {}
     Reading time: ~{} hours
     """.format(book.get("title"), book.get("author"), 
-               book.get("released"), book.get("pages"), readTime)
+               book.get("released"), book.get("pages"), str(readTime))
     print(bookDescription)
 
 
