@@ -93,8 +93,10 @@ def bookInfo(book: Dict):
     {} by {} - {}
     Pages: {}
     Reading time: ~{} hours
-    """.format(book.get("title"), book.get("author"), 
-               book.get("released"), book.get("pages"), str(readTime))
+    Rating: {} / 10
+    """.format(book.get("title"), book.get("author"),
+               book.get("released"), book.get("pages"), str(readTime), book.get("rating", "no rating"))
+
     print(bookDescription)
 
 
@@ -119,14 +121,74 @@ def addBook():
     print("You have entered a new book!")
     bookInfo(newBook)
     BOOKS.append(newBook)
+    # BOOKS.insert(0, newBook) # lisa listi algusesse
 
 
 def delBook():
     print("DELETE A BOOK")
     chosenBookIndex = chooseBook()
-    print("You removed", BOOKS[chosenBookIndex].get("title"))
-    BOOKS.pop(chosenBookIndex)
-    
+    print("Are You certain you want to remove this book - ",
+          BOOKS[chosenBookIndex].get("title"))
+    usersResponse = input("Yes or No")
+    if usersResponse == "No":
+        exit()
+    elif usersResponse == "Yes":
+        bookTitle = BOOKS[chosenBookIndex].get("title")
+        BOOKS.pop(chosenBookIndex)
+        print(bookTitle + " has been deleted.")
+
+    # BOOKS.pop(chosenBookIndex) oleks õigem kui delete toimub enne confirmation msg't
+
+
+def editBook():
+    print("Which book would you like to edit?")
+    chosenBookIndex = chooseBook()
+    print("Are You certain you want to edit this book -",
+          BOOKS[chosenBookIndex].get("title"))
+    usersResponse = input("Yes or No")
+    if usersResponse == "No":
+        exit()
+    elif usersResponse == "Yes":
+        print("What would you like to edit?")
+        print("title", "author", "released", "pages")
+        usersEditChoice = input()
+        if usersEditChoice == "title":
+            BOOKS[chosenBookIndex].update(
+                {"title": input("Enter a new title ")})
+            print("Books title has been updated to - ",
+                  BOOKS[chosenBookIndex].get("title"))
+
+        elif usersEditChoice == "author":
+            BOOKS[chosenBookIndex].update(
+                {"author": input("Enter a new author ")})
+            print("Books author has been changed to - ",
+                  BOOKS[chosenBookIndex].get("author"))
+
+        elif usersEditChoice == "released":
+            BOOKS[chosenBookIndex].update(
+                {"released": input("Enter a new year of release")})
+            print("Books release date has been changed to - ",
+                  BOOKS[chosenBookIndex].get("released"))
+
+        elif usersEditChoice == "pages":
+            BOOKS[chosenBookIndex].update(
+                {"pages": input("How many pages is it?")})
+            print("Books length has been changed to -",
+                  BOOKS[chosenBookIndex].get("pages"))
+
+
+def bookRater():
+    print("Which book would you like to rate (order number)")
+    chosenBookIndex = chooseBook()
+    print("You are rating this book - ",
+          BOOKS[chosenBookIndex].get("title"))
+    print("On a 10 star scale how much would you give?")
+    usersRating = input()
+    BOOKS[chosenBookIndex].update(
+        {"rating": usersRating})
+    print("You've added a rating to - ",
+          BOOKS[chosenBookIndex].get("title"), "to a ", usersRating)
+
 
 def startMenu():
     menuOptions = """
@@ -135,6 +197,8 @@ def startMenu():
 2. Choose a book
 3. Add a book
 4. Del a book
+5. Edit book info
+6. Rate a book
 
 0. Exit
     """
@@ -151,6 +215,10 @@ def startMenu():
             addBook()
         elif(selection == 4):
             delBook()
+        elif(selection == 5):
+            editBook()
+        elif(selection == 6):
+            bookRater()
         else:
             print("Couldn't understand your choice, here are the options")
 
